@@ -325,18 +325,15 @@ class WeakPDELibrary(BaseFeatureLibrary):
         index[1:] = temp
         
         print("The new weak form is in use")
-        for k in range(self.grid_ndim):
-        
-            for i in range(self.K-1):
+        for i in range(self.K-1):
+            interval_mid = np.zeros((self.grid_ndim, 2))
             
-#             interval_mid = np.zeros((self.grid_ndim, 2))
-            
-            
+            for k in range(self.grid_ndim):
                 interval = np.array([self.spatiotemporal_grid[index[i], k], self.spatiotemporal_grid[index[i+1], k]])
                 self.domain_centers[i, k] = np.mean(interval)
-#                 interval_mid[k, :] = interval
-                
-#             self.intervals[i] = interval_mid
+                interval_mid[k, :] = interval
+            
+            self.intervals[i] = interval_mid
                 
                 
         ## self.inds_k is the number of points in each of the subdomains, which is domain_size
