@@ -183,6 +183,9 @@ class WeakPDELibrary(BaseFeatureLibrary):
         self.p = p
         self.periodic = periodic
         self.num_trajectories = 1
+        
+#         for theta_nonloc_p calculation
+        self.intervals = np.zeros(self.K, dtype = 'object')
 
         if function_names and (len(library_functions) != len(function_names)):
             raise ValueError(
@@ -301,7 +304,7 @@ class WeakPDELibrary(BaseFeatureLibrary):
         
         ## Create a subspace based on the data points
         ## Create domain center
-        ##Data length
+        ## Data length
         data_length = len(self.spatiotemporal_grid[:, 0])
         
         ## Make sure that the number of subdomains don't exceed maximum possible given the spatiotemporal grid
@@ -323,9 +326,18 @@ class WeakPDELibrary(BaseFeatureLibrary):
         
         print("The new weak form is in use")
         for k in range(self.grid_ndim):
+        
             for i in range(self.K-1):
+            
+#             interval_mid = np.zeros((self.grid_ndim, 2))
+            
+            
                 interval = np.array([self.spatiotemporal_grid[index[i], k], self.spatiotemporal_grid[index[i+1], k]])
                 self.domain_centers[i, k] = np.mean(interval)
+#                 interval_mid[k, :] = interval
+                
+#             self.intervals[i] = interval_mid
+                
                 
         ## self.inds_k is the number of points in each of the subdomains, which is domain_size
         
