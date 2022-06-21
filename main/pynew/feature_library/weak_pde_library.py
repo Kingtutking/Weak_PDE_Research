@@ -183,9 +183,6 @@ class WeakPDELibrary(BaseFeatureLibrary):
         self.p = p
         self.periodic = periodic
         self.num_trajectories = 1
-        
-#         for theta_nonloc_p calculation
-        self.intervals = np.zeros(self.K, dtype = 'object')
 
         if function_names and (len(library_functions) != len(function_names)):
             raise ValueError(
@@ -290,10 +287,10 @@ class WeakPDELibrary(BaseFeatureLibrary):
         """
         dims = self.spatiotemporal_grid.shape[:-1]
         self.grid_dims = dims
-
+        self.intervals = []
         # Sample the random domain centers
         xt1, xt2 = self._get_spatial_endpoints()
-           ## K = 100 subregions by default, each of whose center is given by a vector of n points
+        ## K = 100 subregions by default, each of whose center is given by a vector of n points
         ##self.domain_centers = np.zeros((self.K, self.grid_ndim))
         ## The domain center grid must be at least H_xt[i] away from the actual defined boundaries. 
         ## Codewise, this constraint is given by the fact that when we construct the grid for XT_interpolator
@@ -304,7 +301,7 @@ class WeakPDELibrary(BaseFeatureLibrary):
         
         ## Create a subspace based on the data points
         ## Create domain center
-        ## Data length
+        ##Data length
         data_length = len(self.spatiotemporal_grid[:, 0])
         
         ## Make sure that the number of subdomains don't exceed maximum possible given the spatiotemporal grid
@@ -324,18 +321,15 @@ class WeakPDELibrary(BaseFeatureLibrary):
         index = np.zeros(self.K + 1, dtype = 'int64')
         index[1:] = temp
         
-        print("The new weak form is in use")
-        for i in range(self.K-1):
-            interval_mid = np.zeros((self.grid_ndim, 2))
-            
-            for k in range(self.grid_ndim):
+        print("This is the right things")
+        for k in range(self.grid_ndim):
+            for i in range(self.K-1):
                 interval = np.array([self.spatiotemporal_grid[index[i], k], self.spatiotemporal_grid[index[i+1], k]])
+                self.intervals.append(interval)
                 self.domain_centers[i, k] = np.mean(interval)
-                interval_mid[k, :] = interval
-            
-            self.intervals[i] = interval_mid
                 
-                
+        print(self.intervals)
+        print("Hello")
         ## self.inds_k is the number of points in each of the subdomains, which is domain_size
         
         self.inds_k = []
