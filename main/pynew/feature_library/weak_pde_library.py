@@ -329,6 +329,7 @@ class WeakPDELibrary(BaseFeatureLibrary):
                 self.domain_centers[i, k] = np.mean(interval)
                 
         print(self.intervals)
+        print(self.inter)
         print("Hello")
         ## self.inds_k is the number of points in each of the subdomains, which is domain_size
         
